@@ -1,2 +1,53 @@
 <h1>About me</h1>
 <p>Hello there! I am YOUR NAME HERE and this is my amazing app!</p>
+
+<h2 class="mt-4">あなたのタスクカレンダー</h2>
+
+<% if user_signed_in? %>
+	<% month = @month %>
+	<% first_day = month.beginning_of_month.beginning_of_week(:sunday) %>
+	<% last_day = month.end_of_month.end_of_week(:sunday) %>
+
+	<div class="d-flex justify-content-between align-items-center mb-2">
+		<div>
+			<%= link_to "◀", pages_about_path(month: (month << 1).to_s), class: "btn btn-sm btn-outline-secondary me-2" %>
+			<%= link_to "▶", pages_about_path(month: (month >> 1).to_s), class: "btn btn-sm btn-outline-secondary" %>
+		</div>
+		<div><strong><%= month.strftime("%Y年 %m月") %></strong></div>
+		<div></div>
+	</div>
+
+	<table class="table table-bordered rg-calendar">
+		<thead>
+			<tr>
+				<% Date::DAYNAMES.each do |dname| %>
+					<th class="text-center"><%= dname %></th>
+				<% end %>
+			</tr>
+		</thead>
+		<tbody>
+			<% day = first_day %>
+			<% while day <= last_day %>
+				<tr>
+					<% 7.times do %>
+						<% classes = [] %>
+						<% classes << 'bg-light' if day.month != month.month %>
+						<td class="align-top <%= classes.join(' ') %>">
+							<div class="small text-muted"><%= day.day %></div>
+							<% if @ideas_by_date[day] %>
+								<ul class="list-unstyled mt-1">
+									<% @ideas_by_date[day].each do |idea| %>
+										<li><%= link_to idea.name, idea_path(idea) %></li>
+									<% end %>
+								</ul>
+							<% end %>
+						</td>
+						<% day = day + 1 %>
+					<% end %>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+<% else %>
+	<p>タスクカレンダーを表示するにはサインインしてください。<%= link_to "Sign in", new_user_session_path %></p>
+<% end %>

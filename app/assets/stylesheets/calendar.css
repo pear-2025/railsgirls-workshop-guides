@@ -1,0 +1,31 @@
+/* Calendar styles for pages/about calendar */
+.rg-calendar {
+  table-layout: fixed;
+  width: 100%;
+}
+
+/* Make tbody cells uniform height */
+.rg-calendar tbody td {
+  height: 120px;
+  vertical-align: top;
+  padding: 8px;
+  overflow: hidden;
+}
+
+/* Slight backgrounds for weekend columns: Sunday (1st col) red, Saturday (7th col) blue */
+.rg-calendar tbody td:nth-child(1) {
+  background-color: #fff0f0; /* light red */
+}
+.rg-calendar tbody td:nth-child(7) {
+  background-color: #f0f8ff; /* light blue */
+}
+
+/* Keep header row styling unchanged; ensure header cells don't inherit body cell height */
+.rg-calendar thead th {
+  height: auto;
+}
+
+/* When a day is outside the month, keep it visually muted */
+.rg-calendar tbody td.bg-light {
+  opacity: 0.85;
+}
