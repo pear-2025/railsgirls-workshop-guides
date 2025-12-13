@@ -27,6 +27,21 @@
   </div>
 
   <div>
+    <%= form.label :date, "提出日", style: "display: block" %>
+    <%= form.date_field :date %>
+  </div>
+
+  <div>
+    <%= form.label :subject, "科目", style: "display: block" %>
+    <%= form.text_field :subject %>
+  </div>
+
+  <div>
+    <%= form.label :submission_method, "提出方法 (URLならリンクになります)", style: "display: block" %>
+    <%= form.text_field :submission_method %>
+  </div>
+
+  <div>
     <%= form.submit %>
   </div>
 <% end %>

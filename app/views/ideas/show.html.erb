@@ -4,6 +4,25 @@
   <div class="d-flex flex-column gap-2 w-100">
     <h1><%= @idea.name %></h1>
     <p><%= @idea.description %></p>
+    <% if @idea.date.present? || @idea.subject.present? || @idea.submission_method.present? %>
+      <p>
+        <% if @idea.date.present? %>
+          <strong>提出日:</strong> <%= @idea.date %><br>
+        <% end %>
+        <% if @idea.subject.present? %>
+          <strong>科目:</strong> <%= @idea.subject %><br>
+        <% end %>
+        <% if @idea.submission_method.present? %>
+          <strong>提出方法:</strong>
+          <% submission = @idea.submission_method %>
+          <% if submission =~ /\Ahttps?:\/\//i %>
+            <%= link_to submission, submission, target: "_blank", rel: "noopener" %>
+          <% else %>
+            <%= submission %>
+          <% end %>
+        <% end %>
+      </p>
+    <% end %>
     <small class="opacity-50 text-nowrap">Last updated <%= time_ago_in_words @idea.updated_at %></small>
   </div>
   <%= image_tag(@idea.picture_url, width: 150, height: 150, class: "img-thumbnail flex-shrink-0") if @idea.picture? %>
