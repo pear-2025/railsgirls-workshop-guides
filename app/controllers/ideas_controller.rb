@@ -66,7 +66,21 @@ class IdeasController < ApplicationController
       render json: { error: "Unauthorized" }, status: :unauthorized
       return
     end
-    @idea.update(submission: @idea.submission == 0 ? 1 : 0)
+    
+    # JSONパラメータから submission 値を取得
+    submission_value = params.dig(:submission)
+    if submission_value.nil?
+      # JSONボディから直接取得
+      submission_value = JSON.parse(request.body.read)['submission'] rescue nil
+      request.body.rewind if request.body.respond_to?(:rewind)
+    end
+    
+    if submission_value.nil?
+      render json: { error: "submission パラメータが必要です" }, status: :bad_request
+      return
+    end
+    
+    @idea.update(submission: submission_value)
     respond_to do |format|
       format.html { redirect_to @idea, notice: "提出状態を更新しました。" }
       format.json { render json: { submission: @idea.submission } }
