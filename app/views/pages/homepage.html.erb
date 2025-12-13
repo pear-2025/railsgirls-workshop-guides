@@ -8,6 +8,49 @@
 <div class="container">
   <% if user_signed_in? %>
     <% if @ideas.any? %>
+      <div class="row mb-4">
+        <div class="col-md-3">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">未着手</h5>
+              <p class="card-text display-6">
+                <span class="badge bg-secondary"><%= @stats[:not_started] %></span>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">進行中</h5>
+              <p class="card-text display-6">
+                <span class="badge bg-primary"><%= @stats[:in_progress] %></span>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">完了済み</h5>
+              <p class="card-text display-6">
+                <span class="badge bg-success"><%= @stats[:completed] %></span>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">合計</h5>
+              <p class="card-text display-6">
+                <span class="badge bg-dark"><%= @stats[:not_started] + @stats[:in_progress] + @stats[:completed] %></span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="list-group">
         <%= render @ideas %>
       </div>
