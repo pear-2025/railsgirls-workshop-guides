@@ -29,9 +29,9 @@
 </div>
 
 <div class="d-flex gap-3 py-3">
-  <%= link_to "Edit this idea", edit_idea_path(@idea), class: "btn btn-primary" %>
-  <%= link_to "Back to ideas", ideas_path, class: "btn btn-outline-secondary" %>
-  <%= button_to "Destroy this idea", @idea, method: :delete, class: "btn btn-danger", form: { data: { turbo_confirm: "Are you sure?" } } %>
+  <%= link_to "タスクを追加", edit_idea_path(@idea), class: "btn btn-primary" %>
+  <%= link_to "タスク一覧にもどる", ideas_path, class: "btn btn-outline-secondary" %>
+  <%= button_to "タスクを削除", @idea, method: :delete, class: "btn btn-danger", form: { data: { turbo_confirm: "Are you sure?" } } %>
 </div>
 
 <h2>Comments</h2>
@@ -40,7 +40,7 @@
     <div>
       <p><strong><%= comment.user_name %></strong></p>
       <p><%= comment.body %></p>
-      <%= button_to "Destroy this comment", idea_comment_path(@idea, comment), method: :delete, class: "btn btn-danger", form: { data: { turbo_confirm: "Are you sure?" } } %>
+      <%= button_to "メモを削除", idea_comment_path(@idea, comment), method: :delete, class: "btn btn-danger", form: { data: { turbo_confirm: "Are you sure?" } } %>
     </div>
   <% end %>
 <% else %>
