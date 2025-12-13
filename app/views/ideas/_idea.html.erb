@@ -42,6 +42,21 @@
             提出完了
           </button>
         <% end %>
+        <% if idea.date.present? %>
+          <br>
+          <% remaining_days = (idea.date - Date.today).to_i %>
+          <small class="<%= remaining_days < 0 ? 'text-danger' : remaining_days <= 3 ? 'text-warning' : 'text-muted' %>">
+            <strong>残り日数:</strong>
+            <% if remaining_days < 0 %>
+              期限切れ（<%= remaining_days.abs %>日前）
+            <% elsif remaining_days == 0 %>
+              本日が提出期限
+            <% else %>
+              あと<%= remaining_days %>日
+            <% end %>
+          </small>
+        <% end %>
+
       </p>
     <% end %>
     <small class="opacity-50 text-nowrap">Last updated <%= time_ago_in_words idea.updated_at %></small>

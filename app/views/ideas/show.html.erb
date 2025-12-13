@@ -22,6 +22,19 @@
           <% end %>
         <% end %>
                <strong>提出状態:</strong> <span id="submission-status-<%= @idea.id %>"><%= @idea.submission == 1 ? "提出済み ✓" : "未提出" %></span><br>
+        <% if @idea.date.present? %>
+          <% remaining_days = (@idea.date - Date.today).to_i %>
+          <small class="<%= remaining_days < 0 ? 'text-danger' : remaining_days <= 3 ? 'text-warning' : 'text-muted' %>">
+            <strong>残り日数:</strong>
+            <% if remaining_days < 0 %>
+              期限切れ（<%= remaining_days.abs %>日前）
+            <% elsif remaining_days == 0 %>
+              本日が提出期限
+            <% else %>
+              あと<%= remaining_days %>日
+            <% end %>
+          </small><br>
+        <% end %>
         <% if @idea.submission == 1 %>
           <button class="btn btn-lg btn-warning idea-submission-btn" data-idea-id="<%= @idea.id %>" data-action="cancel">
             提出を取り消す
