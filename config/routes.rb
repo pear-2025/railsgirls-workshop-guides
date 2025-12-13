@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   root "pages#homepage"
   resources :ideas do
     resources :comments
+    member do
+      patch :toggle_submission
+    end
   end
   # root "hello#index"
 end

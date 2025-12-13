@@ -1,5 +1,5 @@
 class IdeasController < ApplicationController
-  before_action :set_idea, only: %i[ show edit update destroy ]
+  before_action :set_idea, only: %i[ show edit update destroy toggle_submission ]
   before_action :authenticate_user!, except: %i[ show ]
 
   # GET /ideas or /ideas.json
@@ -59,6 +59,20 @@ class IdeasController < ApplicationController
     end
   end
 
+  # PATCH /ideas/1/toggle_submission
+  def toggle_submission
+    authenticate_user!
+    unless @idea.user_id == current_user.id
+      render json: { error: "Unauthorized" }, status: :unauthorized
+      return
+    end
+    @idea.update(submission: @idea.submission == 0 ? 1 : 0)
+    respond_to do |format|
+      format.html { redirect_to @idea, notice: "提出状態を更新しました。" }
+      format.json { render json: { submission: @idea.submission } }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_idea
@@ -67,6 +81,5 @@ class IdeasController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def idea_params
-      params.require(:idea).permit(:name, :description, :picture, :date, :subject, :submission_method)
-    end
-end
+      params.require(:idea).permit(:name, :description, :picture, :date, :subject, :submission_method, :submission)    end
+  end

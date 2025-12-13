@@ -19,6 +19,16 @@
             <%= submission %>
           <% end %>
         <% end %>
+        <strong>提出状態:</strong> <span id="submission-status-<%= idea.id %>"><%= idea.submission == 1 ? "提出済み ✓" : "未提出" %></span>
+        <% if idea.submission == 1 %>
+          <button class="btn btn-sm btn-warning idea-submission-btn" data-idea-id="<%= idea.id %>" data-action="cancel">
+            提出を取り消す
+          </button>
+        <% else %>
+          <button class="btn btn-sm btn-success idea-submission-btn" data-idea-id="<%= idea.id %>" data-action="submit">
+            提出完了
+          </button>
+        <% end %>
       </p>
     <% end %>
     <small class="opacity-50 text-nowrap">Last updated <%= time_ago_in_words idea.updated_at %></small>
