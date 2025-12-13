@@ -5,6 +5,8 @@ class User < ApplicationRecord
 
   validates :username, presence: true, uniqueness: { case_sensitive: false }
 
+  has_many :ideas, dependent: :destroy
+
   # Devise helpers: make email optional
   def email_required?
     false

@@ -1,6 +1,20 @@
 <div class="px-4 py-5 my-5 text-center">
   <h1 class="display-5 fw-bold">Your To Do Lists</h1>
-  <div class="col-lg-6 mx-auto">
-    <p class="lead mb-4">a</p>
+  <div class="col-lg-8 mx-auto">
+    <p class="lead mb-4">締め切りが近いものから並べ替えています。</p>
   </div>
+</div>
+
+<div class="container">
+  <% if user_signed_in? %>
+    <% if @ideas.any? %>
+      <div class="list-group">
+        <%= render @ideas %>
+      </div>
+    <% else %>
+      <p class="text-center">まだあなたのアイデアがありません。<%= link_to "新規作成", new_idea_path %></p>
+    <% end %>
+  <% else %>
+    <p class="text-center">アイデアを見るにはサインインしてください。<%= link_to "Sign in", new_user_session_path %> または <%= link_to "Sign up", new_user_registration_path %></p>
+  <% end %>
 </div>
