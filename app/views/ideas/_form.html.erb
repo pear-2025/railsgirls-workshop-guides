@@ -42,11 +42,6 @@
   </div>
 
   <div>
-    <%= form.label :status, "ステータス", style: "display: block" %>
-    <%= form.select :status, { "未着手" => "not_started", "進行中" => "in_progress", "完了済み" => "completed" }, {}, { class: "form-select" } %>
-  </div>
-
-  <div>
     <%= form.submit %>
   </div>
 <% end %>
