@@ -29,7 +29,9 @@
 					<% 7.times do %>
 						<% classes = [] %>
 						<% classes << 'bg-light' if day.month != month.month %>
-						<td class="align-top <%= classes.join(' ') %>">
+						<% styles = [] %>
+						<% styles << 'border: 3px solid #000;' if day == Date.today %>
+						<td class="align-top <%= classes.join(' ') %>" style="<%= styles.join(' ') %>">
 							<div class="small text-muted"><%= day.day %></div>
 							<% if @ideas_by_date[day] %>
 								<ul class="list-unstyled mt-1">
