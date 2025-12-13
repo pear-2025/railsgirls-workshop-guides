@@ -1,0 +1,46 @@
+<%= form_with(model: work_log, local: true) do |form| %>
+  <% if work_log.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(work_log.errors.count, "error") %> prohibited this work_log from being saved:</h2>
+      <ul>
+        <% work_log.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :work_date, "作業日", class: "form-label" %>
+    <%= form.date_field :work_date, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :task_name, "タスク名", class: "form-label" %>
+    <%= form.text_field :task_name, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :work_hours, "作業時間（時間）", class: "form-label" %>
+    <%= form.number_field :work_hours, step: 0.5, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :idea_id, "完了したタスク", class: "form-label" %>
+    <% if @ideas.present? %>
+      <%= form.collection_select :idea_id, @ideas, :id, :name, { prompt: "選択してください" }, class: "form-select" %>
+    <% else %>
+      <p class="text-muted">完了済みのタスクがありません</p>
+    <% end %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :description, "説明", class: "form-label" %>
+    <%= form.text_area :description, rows: 4, class: "form-control" %>
+  </div>
+
+  <div>
+    <%= form.submit "保存", class: "btn btn-primary" %>
+    <%= link_to "戻る", work_logs_path, class: "btn btn-secondary" %>
+  </div>
+<% end %>

@@ -10,9 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema[7.1].define(version: 2025_12_13_130000) do
-
+ActiveRecord::Schema[7.1].define(version: 2025_12_13_160000) do
   create_table "comments", force: :cascade do |t|
     t.string "user_name"
     t.text "body"
@@ -32,11 +30,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_13_130000) do
     t.string "subject"
     t.string "submission_method"
     t.integer "user_id"
-    
-    t.integer "submission", default: 0
-
     t.integer "status", default: 0
-    
     t.index ["user_id"], name: "index_ideas_on_user_id"
   end
 
@@ -53,6 +47,22 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_13_130000) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  create_table "work_logs", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "idea_id"
+    t.date "work_date", null: false
+    t.float "work_hours", null: false
+    t.string "task_name"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["idea_id"], name: "index_work_logs_on_idea_id"
+    t.index ["user_id", "work_date"], name: "index_work_logs_on_user_id_and_work_date"
+    t.index ["user_id"], name: "index_work_logs_on_user_id"
+  end
+
   add_foreign_key "comments", "ideas"
   add_foreign_key "ideas", "users"
+  add_foreign_key "work_logs", "ideas"
+  add_foreign_key "work_logs", "users"
 end
