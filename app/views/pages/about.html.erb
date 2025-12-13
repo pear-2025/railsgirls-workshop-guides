@@ -1,7 +1,4 @@
-<h1>About me</h1>
-<p>Hello there! I am YOUR NAME HERE and this is my amazing app!</p>
-
-<h2 class="mt-4">あなたのタスクカレンダー</h2>
+<h2 class="mt-4">タスクカレンダー</h2>
 
 <% if user_signed_in? %>
 	<% month = @month %>
@@ -13,7 +10,7 @@
 			<%= link_to "◀", pages_about_path(month: (month << 1).to_s), class: "btn btn-sm btn-outline-secondary me-2" %>
 			<%= link_to "▶", pages_about_path(month: (month >> 1).to_s), class: "btn btn-sm btn-outline-secondary" %>
 		</div>
-		<div><strong><%= month.strftime("%Y年 %m月") %></strong></div>
+		<div><h1><strong><%= month.strftime("%Y年 %m月") %></strong></h1></div>
 		<div></div>
 	</div>
 
