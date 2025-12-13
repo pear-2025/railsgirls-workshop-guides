@@ -9,46 +9,30 @@
   <% if user_signed_in? %>
     <% if @ideas.any? %>
       <div class="row mb-4">
-        <div class="col-md-3">
+        <div class="col-md-6">
           <div class="card text-center">
             <div class="card-body">
-              <h5 class="card-title">未着手</h5>
+              <h5 class="card-title">提出完了</h5>
               <p class="card-text display-6">
-                <span class="badge bg-secondary"><%= @stats[:not_started] %></span>
+                <span class="badge bg-success"><%= @submitted_count %></span>
               </p>
             </div>
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-6">
           <div class="card text-center">
             <div class="card-body">
-              <h5 class="card-title">進行中</h5>
+              <h5 class="card-title">未提出</h5>
               <p class="card-text display-6">
-                <span class="badge bg-primary"><%= @stats[:in_progress] %></span>
+                <span class="badge bg-warning"><%= @not_submitted_count %></span>
               </p>
             </div>
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="card text-center">
-            <div class="card-body">
-              <h5 class="card-title">完了済み</h5>
-              <p class="card-text display-6">
-                <span class="badge bg-success"><%= @stats[:completed] %></span>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="card text-center">
-            <div class="card-body">
-              <h5 class="card-title">合計</h5>
-              <p class="card-text display-6">
-                <span class="badge bg-dark"><%= @stats[:not_started] + @stats[:in_progress] + @stats[:completed] %></span>
-              </p>
-            </div>
-          </div>
-        </div>
+      </div>
+
+      <div class="text-center mb-4">
+        <%= link_to "作業記録を見る", work_logs_path, class: "btn btn-outline-primary" %>
       </div>
 
       <div class="list-group">

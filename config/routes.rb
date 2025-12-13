@@ -8,5 +8,6 @@ Rails.application.routes.draw do
       patch :toggle_submission
     end
   end
+  resources :work_logs
   # root "hello#index"
 end

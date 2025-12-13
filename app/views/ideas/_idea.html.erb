@@ -1,19 +1,6 @@
-<div id="<%= dom_id idea %>" class="list-group-item list-group-item-action d-flex gap-3 py-3">
+<div id="<%= dom_id idea %>" class="list-group-item list-group-item-action d-flex gap-3 py-3" style="<%= "background-color: #{idea.deadline_color}" if idea.deadline_color %>">
   <div class="d-flex flex-column gap-2 w-100">
-    <div class="d-flex justify-content-between align-items-center">
-      <h2><%= link_to idea.name, idea_path(idea) %></h2>
-      <span class="badge <%= case idea.status
-        when 'not_started' then 'bg-secondary'
-        when 'in_progress' then 'bg-primary'
-        when 'completed' then 'bg-success'
-      end %>">
-        <%= case idea.status
-          when 'not_started' then '未着手'
-          when 'in_progress' then '進行中'
-          when 'completed' then '完了済み'
-        end %>
-      </span>
-    </div>
+    <h2><%= link_to idea.name, idea_path(idea) %></h2>
     <p><%= idea.description %></p>
     <% if idea.date.present? || idea.subject.present? || idea.submission_method.present? %>
       <p>
