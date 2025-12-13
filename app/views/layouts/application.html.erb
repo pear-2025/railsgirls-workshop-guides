@@ -10,6 +10,62 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
     <%= hotwire_livereload_tags if Rails.env.development? %>
+    <script>
+      function setupSubmissionButtons() {
+        const buttons = document.querySelectorAll('.idea-submission-btn');
+        console.log('セットアップ中のボタン数:', buttons.length);
+        
+        buttons.forEach(button => {
+          button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const ideaId = this.dataset.ideaId;
+            const action = this.dataset.action;
+            const url = `/ideas/${ideaId}/toggle_submission`;
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+            const button = this;
+            
+            // action が 'submit' なら 1、'cancel' なら 0 を送信
+            const submissionValue = action === 'submit' ? 1 : 0;
+            
+            console.log('ボタンクリック:', ideaId, 'アクション:', action);
+            console.log('URL:', url, '送信値:', submissionValue);
+            
+            fetch(url, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-Token': csrfToken
+              },
+              body: JSON.stringify({ submission: submissionValue })
+            })
+            .then(response => {
+              console.log('レスポンスステータス:', response.status);
+              if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then(data => {
+              console.log('更新成功:', data);
+              // ページをリロード（キャッシュをクリア）
+              Turbo.cache.clear();
+              location.reload();
+            })
+            .catch(error => {
+              console.error('エラー詳細:', error);
+              alert('提出状態の更新に失敗しました: ' + error.message);
+            });
+          });
+        });
+      }
+      
+      // 初回ロード時
+      document.addEventListener('DOMContentLoaded', setupSubmissionButtons);
+      
+      // Turboによる動的更新時
+      document.addEventListener('turbo:load', setupSubmissionButtons);
+    </script>
   </head>
 
   <body>
