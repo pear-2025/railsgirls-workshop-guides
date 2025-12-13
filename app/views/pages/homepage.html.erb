@@ -35,8 +35,103 @@
         <%= link_to "作業記録を見る", work_logs_path, class: "btn btn-outline-primary" %>
       </div>
 
-      <div class="list-group">
-        <%= render @ideas %>
+      <!-- タブナビゲーション -->
+      <ul class="nav nav-tabs mb-4" id="ideasTab" role="tablist">
+
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="not-submitted-tab" data-bs-toggle="tab" data-bs-target="#not-submitted-pane" type="button" role="tab" aria-controls="not-submitted-pane" aria-selected="false">
+            未提出
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="submitted-tab" data-bs-toggle="tab" data-bs-target="#submitted-pane" type="button" role="tab" aria-controls="submitted-pane" aria-selected="false">
+            提出済み
+          </button>
+        </li>
+                <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all-pane" type="button" role="tab" aria-controls="all-pane" aria-selected="true">
+            一覧
+          </button>
+        </li>
+
+      </ul>
+
+      <!-- タブコンテンツ -->
+      <div class="tab-content" id="ideasTabContent">
+
+        <!-- 未提出のみ -->
+        <div class="tab-pane fade" id="not-submitted-pane" role="tabpanel" aria-labelledby="not-submitted-tab">
+          <div class="list-group">
+            <% not_submitted_ideas = @ideas.select { |idea| idea.submission == 0 } %>
+            <% if not_submitted_ideas.any? %>
+              <%= render not_submitted_ideas %>
+            <% else %>
+              <p class="text-center text-muted">未提出のタスクはありません</p>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- 提出済みのみ -->
+        <div class="tab-pane fade" id="submitted-pane" role="tabpanel" aria-labelledby="submitted-tab">
+          <div class="list-group">
+            <% submitted_ideas = @ideas.select { |idea| idea.submission == 1 } %>
+            <% if submitted_ideas.any? %>
+              <% submitted_ideas.each do |idea| %>
+                <div id="<%= dom_id idea %>" class="list-group-item list-group-item-action d-flex gap-3 py-3">
+                  <div class="d-flex flex-column gap-2 w-100">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <h2><%= link_to idea.name, idea_path(idea) %></h2>
+                      <span class="badge <%= case idea.status
+                        when 'not_started' then 'bg-secondary'
+                        when 'in_progress' then 'bg-primary'
+                        when 'completed' then 'bg-success'
+                      end %>">
+                        <%= case idea.status
+                          when 'not_started' then '未着手'
+                          when 'in_progress' then '進行中'
+                          when 'completed' then '完了済み'
+                        end %>
+                      </span>
+                    </div>
+                    <p><%= idea.description %></p>
+                    <% if idea.date.present? || idea.subject.present? || idea.submission_method.present? %>
+                      <p>
+                        <% if idea.date.present? %>
+                          <strong>提出日:</strong> <%= idea.date %><br>
+                        <% end %>
+                        <% if idea.subject.present? %>
+                          <strong>科目:</strong> <%= idea.subject %><br>
+                        <% end %>
+                        <% if idea.submission_method.present? %>
+                          <strong>提出方法:</strong>
+                          <% submission = idea.submission_method %>
+                          <% if submission =~ /\Ahttps?:\/\//i %>
+                            <%= link_to submission, submission, target: "_blank", rel: "noopener" %>
+                          <% else %>
+                            <%= submission %>
+                          <% end %>
+                        <% end %>
+                        <strong>提出状態:</strong> <span id="submission-status-<%= idea.id %>"><%= idea.submission == 1 ? "提出済み ✓" : "未提出" %></span>
+                      </p>
+                    <% end %>
+                    <small class="opacity-50 text-nowrap">Last updated <%= time_ago_in_words idea.updated_at %></small>
+                  </div>
+                  <%= image_tag(idea.picture_url(:thumb), width: 150, height: 150, class: "img-thumbnail flex-shrink-0") if idea.picture? %>
+                </div>
+              <% end %>
+            <% else %>
+              <p class="text-center text-muted">提出済みのタスクはありません</p>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- すべてのタスク -->
+        <div class="tab-pane fade show active" id="all-pane" role="tabpanel" aria-labelledby="all-tab">
+          <div class="list-group">
+            <%= render @ideas %>
+          </div>
+        </div>
+
       </div>
     <% else %>
       <p class="text-center">まだあなたのアイデアがありません。<%= link_to "新規作成", new_idea_path %></p>
