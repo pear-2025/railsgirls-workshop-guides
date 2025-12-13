@@ -1,0 +1,105 @@
+<div class="px-4 py-5 my-5 text-center">
+  <h1 class="display-5 fw-bold">作業記録</h1>
+  <div class="col-lg-8 mx-auto">
+    <p class="lead mb-4">日々の作業時間を記録してください。</p>
+    <%= link_to "新規作成", new_work_log_path, class: "btn btn-primary" %>
+  </div>
+</div>
+
+<div class="container">
+  <% if user_signed_in? %>
+    <div class="row mb-5">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title mb-0">過去7日間の作業時間（ヒストグラム）</h5>
+          </div>
+          <div class="card-body">
+            <canvas id="workChart" height="80"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <h3>作業記録一覧</h3>
+        <% if @work_logs.any? %>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>日付</th>
+                  <th>タスク名</th>
+                  <th>作業時間</th>
+                  <th>完了タスク</th>
+                  <th>説明</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @work_logs.each do |log| %>
+                  <tr>
+                    <td><%= log.work_date.strftime('%Y年%m月%d日') %></td>
+                    <td><%= log.task_name %></td>
+                    <td><%= number_with_precision(log.work_hours, precision: 1) %> 時間</td>
+                    <td>
+                      <% if log.idea.present? %>
+                        <%= link_to log.idea.name, idea_path(log.idea) %>
+                      <% else %>
+                        -
+                      <% end %>
+                    </td>
+                    <td><%= truncate(log.description, length: 50) %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% else %>
+          <p class="text-center">作業記録がありません。</p>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <p class="text-center">作業記録を見るにはサインインしてください。<%= link_to "Sign in", new_user_session_path %></p>
+  <% end %>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('workChart');
+    if (ctx) {
+      const chartData = {
+        labels: <%= @weekly_stats.keys.to_json.html_safe %>,
+        data: <%= @weekly_stats.values.to_json.html_safe %>
+      };
+      
+      const chart = new Chart(ctx.getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: chartData.labels,
+          datasets: [{
+            label: '作業時間（時間）',
+            data: chartData.data,
+            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                stepSize: 1
+              }
+            }
+          }
+        }
+      });
+    }
+  });
+</script>

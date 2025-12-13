@@ -5,5 +5,6 @@ Rails.application.routes.draw do
   resources :ideas do
     resources :comments
   end
+  resources :work_logs
   # root "hello#index"
 end
