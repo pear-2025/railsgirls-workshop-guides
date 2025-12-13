@@ -1,9 +1,10 @@
 class IdeasController < ApplicationController
   before_action :set_idea, only: %i[ show edit update destroy ]
+  before_action :authenticate_user!, except: %i[ show ]
 
   # GET /ideas or /ideas.json
   def index
-    @ideas = Idea.all
+    @ideas = user_signed_in? ? current_user.ideas : Idea.none
   end
 
   # GET /ideas/1 or /ideas/1.json
@@ -22,7 +23,7 @@ class IdeasController < ApplicationController
 
   # POST /ideas or /ideas.json
   def create
-    @idea = Idea.new(idea_params)
+    @idea = current_user.ideas.build(idea_params)
 
     respond_to do |format|
       if @idea.save
