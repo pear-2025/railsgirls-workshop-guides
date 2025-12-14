@@ -36,7 +36,12 @@
 							<% if @ideas_by_date[day] %>
 								<ul class="list-unstyled mt-1">
 									<% @ideas_by_date[day].each do |idea| %>
-										<li><%= link_to idea.name, idea_path(idea) %></li>
+										<li>
+											<%= link_to idea.name, idea_path(idea) %>
+											<% if idea.submission == 1 %>
+												<span class="text-success">✓</span>
+											<% end %>
+										</li>
 									<% end %>
 								</ul>
 							<% end %>
