@@ -9,5 +9,8 @@ Rails.application.routes.draw do
     end
   end
   resources :work_logs
+  get 'profile', to: 'profiles#show', as: :profile
+  get 'profile/edit', to: 'profiles#edit', as: :edit_profile
+  patch 'profile', to: 'profiles#update'
   # root "hello#index"
 end

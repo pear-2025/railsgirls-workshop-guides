@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_13_160000) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_13_170000) do
+
   create_table "comments", force: :cascade do |t|
     t.string "user_name"
     t.text "body"
@@ -30,8 +31,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_13_160000) do
     t.string "subject"
     t.string "submission_method"
     t.integer "user_id"
-    t.integer "submission", default: 0
     t.integer "status", default: 0
+    t.integer "submission", default: 0
     t.index ["user_id"], name: "index_ideas_on_user_id"
   end
 
@@ -44,6 +45,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_13_160000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "username"
+    t.string "avatar"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
   end
