@@ -37,6 +37,11 @@
   </div>
 
   <div>
+    <%= form.label :tag_list, "タグ (カンマで区切ってください)", style: "display: block" %>
+    <%= form.text_field :tag_list, value: idea.tag_list.join(',') %>
+  </div>
+
+  <div>
     <%= form.label :submission_method, "提出方法 (URLならリンクになります)", style: "display: block" %>
     <%= form.text_field :submission_method %>
   </div>

@@ -23,4 +23,22 @@ class PagesController < ApplicationController
       @not_submitted_count = 0
     end
   end
+
+  def homepage
+    if user_signed_in?
+      @ideas = current_user.ideas.order(updated_at: :desc)
+
+      if params[:tag].present?
+        # タグ検索ロジック
+        # tagsカラムに検索語が単独のタグとして含まれているものを検索します
+        # (例: "ruby" で検索した場合に "ruby on rails" がヒットしないように)
+        @ideas = @ideas.where("',' || tags || ',' LIKE ?", "%,#{params[:tag]},%")
+      end
+
+      @submitted_count = @ideas.where(submission: 1).count
+      @not_submitted_count = @ideas.where(submission: 0).count
+    else
+      @ideas = Idea.none
+    end
+  end
 end

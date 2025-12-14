@@ -1,6 +1,6 @@
 class Idea < ApplicationRecord
   belongs_to :user
-  has_many :comments
+  has_many :comments, dependent: :destroy
   mount_uploader :picture, PictureUploader
 
   enum status: { not_started: 0, in_progress: 1, completed: 2 }
@@ -18,4 +18,15 @@ class Idea < ApplicationRecord
       nil
     end
   end
+
+  # `tags`カラムを配列のように扱えるようにします
+  def tag_list
+    tags.to_s.split(',')
+  end
+
+  # フォームから送られてきたカンマ区切りの文字列を`tags`カラムに保存します
+  def tag_list=(tags_string)
+    self.tags = tags_string
+  end
+
 end

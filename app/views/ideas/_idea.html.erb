@@ -44,6 +44,15 @@
           </small>
         <% end %>
 
+        <% if idea.tag_list.any? %>
+          <br>
+          <strong>タグ:</strong>
+          <% idea.tag_list.each do |tag| %>
+            <% unless tag.blank? %>
+              <span class="badge bg-info text-dark"><%= tag.strip %></span>
+            <% end %>
+          <% end %>
+        <% end %>
       </p>
     <% end %>
     <small class="opacity-50 text-nowrap">Last updated <%= time_ago_in_words idea.updated_at %></small>
