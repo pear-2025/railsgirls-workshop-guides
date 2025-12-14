@@ -44,6 +44,11 @@
           </button>
         </li>
         <li class="nav-item" role="presentation">
+          <button class="nav-link" id="expired-tab" data-bs-toggle="tab" data-bs-target="#expired-pane" type="button" role="tab" aria-controls="expired-pane" aria-selected="false">
+            期限切れ
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
           <button class="nav-link" id="submitted-tab" data-bs-toggle="tab" data-bs-target="#submitted-pane" type="button" role="tab" aria-controls="submitted-pane" aria-selected="false">
             提出済み
           </button>
@@ -71,6 +76,18 @@
           </div>
         </div>
 
+        <!-- 期限切れのみ(未提出) -->
+        <div class="tab-pane fade" id="expired-pane" role="tabpanel" aria-labelledby="expired-tab">
+          <div class="list-group">
+            <% expired_ideas = @ideas.select { |idea| idea.submission == 0 && idea.date.present? && idea.date < Date.today } %>
+            <% if expired_ideas.any? %>
+              <%= render expired_ideas %>
+            <% else %>
+              <p class="text-center text-muted">期限切れのタスクはありません</p>
+            <% end %>
+          </div>
+        </div>
+
         <!-- 提出済みのみ -->
         <div class="tab-pane fade" id="submitted-pane" role="tabpanel" aria-labelledby="submitted-tab">
           <div class="list-group">
@@ -86,11 +103,6 @@
                         when 'in_progress' then 'bg-primary'
                         when 'completed' then 'bg-success'
                       end %>">
-                        <%= case idea.status
-                          when 'not_started' then '未着手'
-                          when 'in_progress' then '進行中'
-                          when 'completed' then '完了済み'
-                        end %>
                       </span>
                     </div>
                     <p><%= idea.description %></p>
