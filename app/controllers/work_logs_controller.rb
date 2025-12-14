@@ -1,9 +1,19 @@
 class WorkLogsController < ApplicationController
   before_action :authenticate_user!
-
   def index
     @work_logs = current_user.work_logs.order(work_date: :desc)
-    @weekly_stats = calculate_weekly_stats
+    
+    # 過去7日間の作業時間を日毎に集計
+    seven_days_ago = Date.today - 6
+    daily_stats = @work_logs.where('work_date >= ?', seven_days_ago)
+                            .group(:work_date)
+                            .sum(:work_hours)
+
+    # グラフ用にデータを整形
+    @weekly_stats = (0..6).map do |i|
+      date = Date.today - i
+      [date.strftime('%m/%d'), daily_stats[date] || 0]
+    end.reverse.to_h
   end
 
   def new
